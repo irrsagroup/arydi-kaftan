@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
-const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen }) => {
+const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen, setWishlistOpen }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,6 +50,7 @@ const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen }) => {
           ARYDI KAFTAN
         </div>
 
+        {/* Desktop Navigation */}
         <nav style={{
           display: 'flex',
           gap: 'clamp(15px, 4vw, 32px)',
@@ -71,12 +74,39 @@ const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen }) => {
           ))}
         </nav>
 
+        {/* Desktop Icons */}
         <div style={{
           display: 'flex',
           gap: 'clamp(12px, 4vw, 20px)',
-          display: window.innerWidth < 768 ? 'none' : 'flex'
+          display: window.innerWidth < 768 ? 'none' : 'flex',
+          alignItems: 'center'
         }}>
           <span style={{ cursor: 'pointer', fontSize: '13px' }} onClick={() => setProfileOpen(true)}>PROFILE</span>
+          
+          {/* Wishlist Icon */}
+          <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setWishlistOpen(true)}>
+            <span style={{ fontSize: '16px' }}>♥</span>
+            {wishlistCount > 0 && (
+              <span style={{
+                position: 'absolute',
+                top: '-8px',
+                right: '-12px',
+                backgroundColor: '#000',
+                color: 'white',
+                fontSize: '10px',
+                borderRadius: '50%',
+                width: '16px',
+                height: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                {wishlistCount}
+              </span>
+            )}
+          </div>
+          
+          {/* Cart Icon */}
           <div style={{ position: 'relative', cursor: 'pointer' }} onClick={() => setBagOpen(true)}>
             <span style={{ fontSize: '13px' }}>BAG</span>
             {cartCount > 0 && (
@@ -98,9 +128,11 @@ const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen }) => {
               </span>
             )}
           </div>
+          
           <span style={{ cursor: 'pointer', fontSize: '13px' }} onClick={() => setSearchOpen(true)}>SEARCH</span>
         </div>
 
+        {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           style={{
@@ -115,6 +147,7 @@ const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen }) => {
         </button>
       </header>
 
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div style={{
           position: 'fixed',
@@ -153,6 +186,7 @@ const Header = ({ language, setSearchOpen, setBagOpen, setProfileOpen }) => {
             justifyContent: 'center'
           }}>
             <span style={{ cursor: 'pointer' }} onClick={() => { setProfileOpen(true); setIsMobileMenuOpen(false); }}>PROFILE</span>
+            <span style={{ cursor: 'pointer' }} onClick={() => { setWishlistOpen(true); setIsMobileMenuOpen(false); }}>♥</span>
             <span style={{ cursor: 'pointer' }} onClick={() => { setBagOpen(true); setIsMobileMenuOpen(false); }}>BAG</span>
             <span style={{ cursor: 'pointer' }} onClick={() => { setSearchOpen(true); setIsMobileMenuOpen(false); }}>SEARCH</span>
           </div>

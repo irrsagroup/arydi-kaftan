@@ -125,7 +125,9 @@ const UserDashboard = ({ language }) => {
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  marginBottom: '15px'
+                  marginBottom: '15px',
+                  flexWrap: 'wrap',
+                  gap: '10px'
                 }}>
                   <span style={{ fontWeight: 'bold' }}>
                     {language === 'EN' ? 'Order' : 'طلب'} #{order.id}
@@ -135,18 +137,67 @@ const UserDashboard = ({ language }) => {
                     {order.status}
                   </span>
                 </div>
+
+                {/* Customer Information */}
+                {order.customer && (
+                  <div style={{
+                    backgroundColor: '#f9f9f9',
+                    padding: '15px',
+                    marginBottom: '15px',
+                    borderRadius: '4px',
+                    fontSize: '14px'
+                  }}>
+                    <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', fontWeight: '600' }}>
+                      {language === 'EN' ? 'Customer Information' : 'معلومات العميل'}
+                    </h4>
+                    <p style={{ margin: '5px 0' }}>
+                      <strong>{language === 'EN' ? 'Full Name:' : 'الاسم الكامل:'}</strong> {order.customer.fullName}
+                    </p>
+                    <p style={{ margin: '5px 0' }}>
+                      <strong>Email:</strong> {order.customer.email}
+                    </p>
+                    <p style={{ margin: '5px 0' }}>
+                      <strong>{language === 'EN' ? 'Phone:' : 'الهاتف:'}</strong> {order.customer.phone}
+                    </p>
+                    <p style={{ margin: '5px 0' }}>
+                      <strong>{language === 'EN' ? 'Address:' : 'العنوان:'}</strong> {order.customer.address}, {order.customer.city}
+                    </p>
+                    {order.customer.notes && (
+                      <p style={{ margin: '5px 0' }}>
+                        <strong>{language === 'EN' ? 'Notes:' : 'ملاحظات:'}</strong> {order.customer.notes}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Items */}
+                <h4 style={{ margin: '15px 0 10px 0', fontSize: '14px', fontWeight: '600' }}>
+                  {language === 'EN' ? 'Items:' : 'المنتوجات:'}
+                </h4>
                 {order.items.map((item, idx) => (
                   <div key={idx} style={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     padding: '8px 0',
                     fontSize: '14px',
-                    color: '#666'
+                    color: '#666',
+                    borderBottom: idx !== order.items.length - 1 ? '1px solid #f0f0f0' : 'none'
                   }}>
                     <span>{language === 'EN' ? item.name : (item.nameAr || item.name)} x{item.quantity}</span>
                     <span>{item.price * item.quantity} MAD</span>
                   </div>
                 ))}
+                
+                {/* Payment Method */}
+                {order.paymentMethod && (
+                  <div style={{ marginTop: '10px', fontSize: '13px', color: '#666' }}>
+                    <strong>{language === 'EN' ? 'Payment:' : 'الدفع:'}</strong>{' '}
+                    {order.paymentMethod === 'cash' 
+                      ? (language === 'EN' ? 'Cash on Delivery' : 'الدفع عند الاستلام')
+                      : (language === 'EN' ? 'Credit Card' : 'بطاقة ائتمان')}
+                  </div>
+                )}
+                
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
